@@ -92,7 +92,7 @@ class ThreatSimulator:
 <plist version="1.0">
 <dict>
     <key>Label</key>
-    <string>com.pun1sh3r</string>
+    <string>com.threat</string>
     <key>ProgramArguments</key>
     <array>
         <string>pun1sh3r</string>
