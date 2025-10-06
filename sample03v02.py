@@ -92,10 +92,10 @@ class ThreatSimulator:
 <plist version="1.0">
 <dict>
     <key>Label</key>
-    <string>com.threat</string>
+    <string>com.pun1sh3r</string>
     <key>ProgramArguments</key>
     <array>
-        <string>ARTV</string>
+        <string>pun1sh3r</string>
         <string>{script_path}</string>
     </array>
     <key>RunAtLoad</key>
