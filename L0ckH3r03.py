@@ -42,7 +42,7 @@ class ThreatSimulator:
             os.path.join(self.home_directory, *folder.split("/"))
             for folder in folders
         ]    
-        self.extension = ".L0ckH3r0v2"
+        self.extension = ".L0ckH3r0v3"
 
     def generate_key(self, password: bytes) -> bytes:
         from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
