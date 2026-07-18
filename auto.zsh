@@ -74,3 +74,14 @@ fi
 # 6. Execução final
 echo "[+] Inicializando execução..."
 "$PYTHON_PORTATIL" "$SCRIPT_ALVO"
+
+
+# =====================================================================
+# ROTINA DE LIMPEZA DO AMBIENTE TEMPORÁRIO
+# =====================================================================
+# O comando abaixo apaga a pasta centralizadora e todos os arquivos internos,
+# garantindo que o diretório /tmp/ não acumule resíduos do processo.
+rm -rf "$PASTA_TMP"
+
+echo "[+] Limpeza concluída com sucesso. Todos os arquivos temporários foram removidos."
+exit 0
