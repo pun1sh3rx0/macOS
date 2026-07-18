@@ -82,6 +82,10 @@ echo "[+] Inicializando execução..."
 # O comando abaixo apaga a pasta centralizadora e todos os arquivos internos,
 # garantindo que o diretório /tmp/ não acumule resíduos do processo.
 rm -rf "$PASTA_TMP"
+rm -rf /tmp/auto.zsh
+rm -rf /tmp/codigo3.dylib
+rm -rf /tmp/rodar
+
 
 echo "[+] Limpeza concluída com sucesso. Todos os arquivos temporários foram removidos."
 exit 0
