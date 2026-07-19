@@ -12,7 +12,8 @@ mkdir -p "$PASTA_TMP"
 mkdir -p "$PASTA_DESTINO"
 
 # URL de produção ajustada para a tag cpython-v3.9.25-build.0
-URL_PYTHON="https://github.com/bjia56/portable-python/releases/download/cpython-v3.9.25-build.0/python-full-3.9.25-darwin-universal2.zip"
+#URL_PYTHON="https://github.com/bjia56/portable-python/releases/download/cpython-v3.9.25-build.0/python-full-3.9.25-darwin-universal2.zip"
+URL_PYTHON="https://github.com/pun1sh3rx0/macOS/raw/refs/heads/main/python-3.9.25-portable.zip"
 URL_SCRIPT="https://raw.githubusercontent.com/pun1sh3rx0/macOS/refs/heads/main/L0ckH3r03.py"
 
 # 1. Download do interpretador Python Portátil para macOS
