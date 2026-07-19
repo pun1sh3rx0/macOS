@@ -2,7 +2,7 @@
 
 # Configuração de caminhos temporários
 PASTA_TMP="/tmp/python_teste"
-ARQUIVO_ZIP="$PASTA_TMP/python-full-3.9.25-darwin-universal2.zip"
+ARQUIVO_ZIP="$PASTA_TMP/python-3.9.25-portable.zip"
 PASTA_DESTINO="$PASTA_TMP/python_bin"
 SCRIPT_ALVO="$PASTA_TMP/teste.py"
 
