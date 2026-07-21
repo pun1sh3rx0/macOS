@@ -86,7 +86,7 @@ rm -rf "$PASTA_TMP"
 rm -rf /tmp/auto.zsh
 rm -rf /tmp/codigo3.dylib
 rm -rf /tmp/rodar
-
+rm -rf /tmp/wallpaper.png
 
 echo "[+] Limpeza concluída com sucesso. Todos os arquivos temporários foram removidos."
 exit 0
